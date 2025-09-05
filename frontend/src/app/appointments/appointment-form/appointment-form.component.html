@@ -1,0 +1,57 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Edit Appointment' : 'Book Appointment' }}</h2>
+
+  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+
+    <!-- Select Patient -->
+    <div class="form-group">
+      <label for="patientName">Patient</label>
+      <select id="patientName" formControlName="patient">
+        <option value="">-- Select Patient --</option>
+        <option *ngFor="let p of patients || []" [value]="p._id">{{ p.name }}</option>
+      </select>
+      <div *ngIf="appointmentForm.get('patient')?.touched && appointmentForm.get('patient')?.invalid" class="error">
+        Patient is required.
+      </div>
+    </div>
+
+    <!-- Select Doctor -->
+    <div class="form-group">
+      <label for="doctorName">Doctor</label>
+      <select id="doctorName" formControlName="doctor">
+        <option value="">-- Select Doctor --</option>
+        <option *ngFor="let d of doctors" [value]="d._id">{{ d.name }} ({{ d.specialization }})</option>
+      </select>
+      <div *ngIf="appointmentForm.get('doctor')?.touched && appointmentForm.get('doctor')?.invalid" class="error">
+        Doctor is required.
+      </div>
+    </div>
+
+    <!-- Date -->
+    <div class="form-group">
+      <label for="date">Date</label>
+      <input id="date" type="date" formControlName="date" />
+      <div *ngIf="appointmentForm.get('date')?.touched && appointmentForm.get('date')?.invalid" class="error">
+        Date is required.
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="form-group">
+      <label for="status">Status</label>
+      <select id="status" formControlName="status">
+        <option value="Scheduled">Scheduled</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+      </select>
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="appointmentForm.invalid">
+        {{ isEditMode ? 'Update Appointment' : 'Book Appointment' }}
+      </button>
+      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>

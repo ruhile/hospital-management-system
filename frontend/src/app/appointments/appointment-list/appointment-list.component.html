@@ -1,0 +1,35 @@
+<div class="appointment-list">
+  <h2>Appointments</h2>
+  <a routerLink="/appointments/add" class="btn-add">+ Book Appointment</a>
+
+  <div *ngIf="loading">Loading appointments...</div>
+
+  <table *ngIf="!loading && appointments.length > 0" class="appointment-table">
+    <thead>
+      <tr>
+        <th>Patient</th>
+        <th>Doctor</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let app of appointments">
+        <td>{{ app.patient?.name }}</td>
+        <td>{{ app.doctor?.name }} ({{ app.doctor?.specialization }})</td>
+        <td>{{ app.date | date:'mediumDate' }}</td>
+        <td>{{ app.status }}</td>
+        <td>
+          <button [routerLink]="['/appointments/details', app._id]" class="btn-details">Details</button>
+          <button (click)="editAppointment(app._id)" class="btn-edit">Edit</button>
+          <button (click)="deleteAppointment(app._id)" class="btn-delete">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && appointments.length === 0">
+    <p>No appointments found.</p>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="details-container" *ngIf="patient; else notFound">
+  <h2>Patient Profile</h2>
+
+  <div class="details-card">
+    <h3>{{ patient.name }}</h3>
+    <p><strong>Age:</strong> {{ patient.age }}</p>
+    <p><strong>Medical History:</strong> {{ patient.medicalHistory || 'N/A' }}</p>
+
+    <!-- Show Appointments -->
+    <div class="appointments" *ngIf="patient.appointments?.length > 0">
+      <h4>Appointments</h4>
+      <ul>
+        <li *ngFor="let app of patient.appointments">
+          <strong>Date:</strong> {{ app.date | date:'medium' }} <br />
+          <strong>Doctor:</strong> {{ app.doctor?.name }} ({{ app.doctor?.specialization }}) <br />
+          <strong>Status:</strong> {{ app.status }}
+        </li>
+      </ul>
+    </div>
+
+    <div *ngIf="patient?.appointments?.length === 0">
+      <p><em>No upcoming appointments</em></p>
+    </div>
+
+    <button class="btn-back" (click)="goBack()">Back to Patients</button>
+  </div>
+</div>
+
+<ng-template #notFound>
+  <p class="not-found">Patient not found.</p>
+  <button class="btn-back" (click)="goBack()">Back</button>
+</ng-template>

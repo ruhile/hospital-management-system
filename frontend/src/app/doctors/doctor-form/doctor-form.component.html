@@ -1,0 +1,46 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Edit Doctor' : 'Add Doctor' }}</h2>
+
+  <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()">
+    <!-- Name -->
+    <div class="form-group">
+      <label for="name">Name</label>
+      <input id="name" type="text" formControlName="name" />
+      <div *ngIf="doctorForm.get('name')?.touched && doctorForm.get('name')?.invalid" class="error">
+        Name is required.
+      </div>
+    </div>
+
+    <!-- Specialization -->
+    <div class="form-group">
+      <label for="specialization">Specialization</label>
+      <input id="specialization" type="text" formControlName="specialization" />
+      <div *ngIf="doctorForm.get('specialization')?.touched && doctorForm.get('specialization')?.invalid" class="error">
+        Specialization is required.
+      </div>
+    </div>
+
+    <!-- Availability (Checkbox group) -->
+    <div class="form-group">
+      <label>Availability</label>
+      <div class="checkbox-group">
+        <label *ngFor="let day of days">
+          <input type="checkbox" [value]="day" (change)="onDayChange($event)" 
+            [checked]="doctorForm.value.availability.includes(day)" />
+          {{ day }}
+        </label>
+      </div>
+      <div *ngIf="doctorForm.get('availability')?.touched && doctorForm.get('availability')?.invalid" class="error">
+        Please select at least one day.
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="doctorForm.invalid">
+        {{ isEditMode ? 'Update Doctor' : 'Add Doctor' }}
+      </button>
+      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>

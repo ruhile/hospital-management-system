@@ -1,0 +1,20 @@
+<div class="details-container" *ngIf="doctor; else notFound">
+  <h2>Doctor Profile</h2>
+
+  <div class="details-card">
+    <h3>{{ doctor.name }}</h3>
+    <p><strong>Specialization:</strong> {{ doctor.specialization }}</p>
+
+    <p><strong>Availability:</strong></p>
+    <div class="availability-badges">
+      <span *ngFor="let day of doctor.availability" class="badge">{{ day }}</span>
+    </div>
+
+    <button class="btn-back" (click)="goBack()">Back to Doctors</button>
+  </div>
+</div>
+
+<ng-template #notFound>
+  <p class="not-found">Doctor not found.</p>
+  <button class="btn-back" (click)="goBack()">Back</button>
+</ng-template>

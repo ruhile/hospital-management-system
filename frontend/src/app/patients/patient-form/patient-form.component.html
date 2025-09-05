@@ -1,0 +1,37 @@
+<div class="form-container">
+  <h2>{{ isEditMode ? 'Edit Patient' : 'Add Patient' }}</h2>
+
+  <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+    <!-- Name -->
+    <div class="form-group">
+      <label for="name">Patient Name</label>
+      <input id="name" formControlName="name" type="text" placeholder="Enter patient's name">
+      <div *ngIf="patientForm.get('name')?.touched && patientForm.get('name')?.invalid" class="error">
+        Name is required.
+      </div>
+    </div>
+
+    <!-- Age -->
+    <div class="form-group">
+      <label for="age">Age</label>
+      <input id="age" formControlName="age" type="number" placeholder="Enter age">
+      <div *ngIf="patientForm.get('age')?.touched && patientForm.get('age')?.invalid" class="error">
+        Age must be greater than 0.
+      </div>
+    </div>
+
+    <!-- Medical History -->
+    <div class="form-group">
+      <label for="medicalHistory">Medical History</label>
+      <textarea id="medicalHistory" formControlName="medicalHistory" placeholder="Eg: Diabetes, Hypertension"></textarea>
+    </div>
+
+    <!-- Buttons -->
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="patientForm.invalid">
+        {{ isEditMode ? 'Update Patient' : 'Add Patient' }}
+      </button>
+      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+    </div>
+  </form>
+</div>

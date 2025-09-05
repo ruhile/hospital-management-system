@@ -1,0 +1,26 @@
+<div class="details-container" *ngIf="appointment; else notFound">
+  <h2>Appointment Details</h2>
+
+  <div class="details-card">
+    <p><strong>Patient:</strong> {{ appointment.patient?.name }} (Age: {{ appointment.patient?.age }})</p>
+    <p><strong>Doctor:</strong> {{ appointment.doctor?.name }} ({{ appointment.doctor?.specialization }})</p>
+    <p><strong>Date:</strong> {{ appointment.date | date:'mediumDate' }}</p>
+    <p>
+      <strong>Status:</strong>
+      <span [ngClass]="{
+        'status-scheduled': appointment.status === 'Scheduled',
+        'status-completed': appointment.status === 'Completed',
+        'status-cancelled': appointment.status === 'Cancelled'
+      }">
+        {{ appointment.status }}
+      </span>
+    </p>
+
+    <button class="btn-back" (click)="goBack()">Back to Appointments</button>
+  </div>
+</div>
+
+<ng-template #notFound>
+  <p class="not-found">Appointment not found.</p>
+  <button class="btn-back" (click)="goBack()">Back</button>
+</ng-template>

@@ -1,0 +1,60 @@
+.details-container {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #023e8a;
+}
+
+.details-card {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+  text-align: left;
+  font-size: 1rem;
+  color: #333;
+}
+
+.details-card p {
+  margin: 12px 0;
+}
+
+.not-found {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #d90429;
+  margin-bottom: 15px;
+}
+
+.btn-back {
+  margin-top: 20px;
+  background-color: #0077b6;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-back:hover {
+  background-color: #023e8a;
+}
+
+/* Status Colors */
+.status-scheduled {
+  color: #0077b6;
+  font-weight: bold;
+}
+.status-completed {
+  color: #2d6a4f;
+  font-weight: bold;
+}
+.status-cancelled {
+  color: #d90429;
+  font-weight: bold;
+}

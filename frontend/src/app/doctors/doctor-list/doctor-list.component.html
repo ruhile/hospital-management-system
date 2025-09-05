@@ -1,0 +1,28 @@
+<div class="doctor-list-container">
+  <h2>Doctors</h2>
+  <a routerLink="/doctors/add" class="btn-add">+ Add Doctor</a>
+
+  <table class="doctor-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Specialization</th>
+        <th>Availability</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let doctor of doctors">
+        <td>{{ doctor.name }}</td>
+        <td>{{ doctor.specialization }}</td>
+        <td>{{ doctor.availability.join(', ') }}</td>
+        <td>
+          <!-- ✅ New Details Button -->
+          <a [routerLink]="['/doctors/details', doctor._id]" class="btn-details">Details</a>
+          <a [routerLink]="['/doctors/edit', doctor._id]" class="btn-edit">Edit</a>
+          <button (click)="deleteDoctor(doctor._id)" class="btn-delete">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
