@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class PatientService {
-  private base = 'http://localhost:4000/api/patients';
+private base = 'https://hospital-backend-4qdr.onrender.com/api/patients';
   constructor(private http: HttpClient) {}
   list(params?: any) { return this.http.get<any>(this.base, { params }); }
   get(id: string) { return this.http.get<any>(`${this.base}/${id}`); }
