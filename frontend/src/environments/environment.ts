@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: "http://localhost:4000"
+  apiUrl: "https://hospital-backend-4qdr.onrender.com"
 };

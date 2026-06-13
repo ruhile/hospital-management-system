@@ -4,6 +4,7 @@ import { PatientService } from '../patient.service';
 import { AppointmentService } from '../appointment.service';
 import { AuthService } from '../auth/auth.service';
 import { forkJoin } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,7 @@ import { forkJoin } from 'rxjs';
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
+  apiUrl = environment.apiUrl;
   doctorCount = 0;
   patientCount = 0;
   appointmentCount = 0;
