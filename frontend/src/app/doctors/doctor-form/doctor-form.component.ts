@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DoctorService } from '../../doctor.service';
+import { ToastService } from '../../toast.service';
 
 @Component({
   selector: 'app-doctor-form',
@@ -19,7 +20,8 @@ export class DoctorFormComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private doctorSvc: DoctorService
+    private doctorSvc: DoctorService,
+    private toastSvc: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -55,18 +57,27 @@ export class DoctorFormComponent implements OnInit {
     }
 
     this.doctorForm.patchValue({ availability });
+    this.doctorForm.get('availability')?.markAsTouched();
   }
 
   onSubmit(): void {
     if (this.doctorForm.invalid) return;
 
     if (this.isEditMode) {
-      this.doctorSvc.update(this.doctorId!, this.doctorForm.value).subscribe(() => {
-        this.router.navigate(['/doctors']);
+      this.doctorSvc.update(this.doctorId!, this.doctorForm.value).subscribe({
+        next: () => {
+          this.toastSvc.showSuccess('Doctor profile updated successfully.');
+          this.router.navigate(['/doctors']);
+        },
+        error: () => this.toastSvc.showError('Failed to update doctor profile.')
       });
     } else {
-      this.doctorSvc.create(this.doctorForm.value).subscribe(() => {
-        this.router.navigate(['/doctors']);
+      this.doctorSvc.create(this.doctorForm.value).subscribe({
+        next: () => {
+          this.toastSvc.showSuccess('Doctor registered successfully.');
+          this.router.navigate(['/doctors']);
+        },
+        error: () => this.toastSvc.showError('Failed to register doctor.')
       });
     }
   }

@@ -1,81 +1,116 @@
-.details-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  text-align: center;
+.details-card-container {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-h2 {
-  margin-bottom: 20px;
-  color: #023e8a;
-}
-
-.details-card {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-  text-align: left;
-}
-
-.details-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #0077b6;
-}
-
-.details-card p {
-  font-size: 1rem;
-  margin: 8px 0;
-  color: #333;
-}
-
-.patients {
-  margin-top: 20px;
-}
-.patients h4 {
-  margin-bottom: 10px;
-  color: #0096c7;
-}
-.patients ul {
-  list-style: disc;
-  padding-left: 20px;
-}
-.patients li {
-  margin: 5px 0;
-}
-
-.not-found {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #d90429;
-  margin-bottom: 15px;
-}
-
-.btn-back {
-  margin-top: 20px;
-  background-color: #0077b6;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-.btn-back:hover {
-  background-color: #023e8a;
-}.availability-badges {
+.details-card-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 5px;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 24px;
+  margin-bottom: 24px;
 }
 
-.badge {
-  background-color: #007bff;
-  color: white;
-  padding: 5px 12px;
-  border-radius: 20px;
+.details-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  background-color: var(--primary-light);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+}
+
+.details-header-info h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.specialization-tag {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  background-color: var(--primary-light);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  margin-top: 6px;
+}
+
+/* Body */
+.details-card-body {
+  margin-bottom: 32px;
+}
+
+.detail-section h2 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-description {
   font-size: 0.9rem;
-  font-weight: 500;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+}
+
+/* Availability day schedule */
+.detail-availability-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.detail-day-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+  background: var(--bg-color);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.detail-day-card i {
+  font-size: 1.05rem;
+}
+
+.detail-day-card.available {
+  background: var(--primary-light);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+/* Actions */
+.details-card-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 24px;
+}
+@media (max-width: 576px) {
+  .details-card-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .details-card-actions {
+    flex-direction: column;
+  }
 }

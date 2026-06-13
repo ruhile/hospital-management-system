@@ -1,37 +1,335 @@
-<div class="home-container">
-  <!-- Hero Section -->
-  <section class="hero">
+<div class="container fade-in">
+  <!-- Reverted Hero Section - Only shown when logged out -->
+  <section class="hero" *ngIf="!authService.isLoggedIn">
     <div class="hero-text">
       <h1>Welcome to Our Hospital Management System</h1>
       <p>Seamless coordination of doctors, patients, and appointments.</p>
-      <button routerLink="/appointments" class="btn-primary">Book Appointment</button>
+      <button routerLink="/login" class="btn-hero-primary">Book Appointment</button>
     </div>
     <div class="hero-image">
       <img src="assets/hospital-illustration.png" alt="Hospital Illustration">
     </div>
   </section>
 
-  <!-- Features Section -->
-  <section class="features">
-    <div class="feature-card">
-      <i class="fas fa-user-md"></i>
-      <h3>Doctors</h3>
-      <p>Manage doctors’ profiles, specialization, and availability.</p>
-      <a routerLink="/doctors" class="btn-link">View Doctors →</a>
+  <!-- Dashboard Details - Only shown when logged in -->
+  <div *ngIf="authService.isLoggedIn">
+    <!-- Error Notification -->
+    <div *ngIf="errorMsg" class="alert-error">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ errorMsg }}</span>
+      <button (click)="fetchDashboardData()" class="btn-retry">Retry</button>
     </div>
 
-    <div class="feature-card">
-      <i class="fas fa-procedures"></i>
-      <h3>Patients</h3>
-      <p>Keep track of patient records and medical history.</p>
-      <a routerLink="/patients" class="btn-link">View Patients →</a>
+    <!-- Loading State -->
+    <div *ngIf="loading && !errorMsg" class="spinner-container">
+      <div class="spinner"></div>
+      <p>Retrieving real-time clinical metrics...</p>
     </div>
 
-    <div class="feature-card">
-      <i class="fas fa-calendar-check"></i>
-      <h3>Appointments</h3>
-      <p>Schedule, update, and manage patient appointments.</p>
-      <a routerLink="/appointments" class="btn-link">Manage Appointments →</a>
+    <!-- Access check wrapper -->
+    <div *ngIf="!loading && !errorMsg && (authService.currentUser$ | async) as user">
+      
+      <!-- ==========================================
+           ADMIN DASHBOARD VIEW
+           ========================================== -->
+      <div *ngIf="user.role === 'admin'">
+        <!-- Stat Cards Grid -->
+        <div class="stats-grid" style="margin-top: 30px;">
+          <!-- Doctors Stat -->
+          <div class="stat-card stat-teal" routerLink="/doctors">
+            <div class="stat-icon">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Doctors</h3>
+              <p class="stat-number">{{ doctorCount }}</p>
+              <span class="stat-link">Manage staff & availability →</span>
+            </div>
+          </div>
+
+          <!-- Patients Stat -->
+          <div class="stat-card stat-indigo" routerLink="/patients">
+            <div class="stat-icon">
+              <i class="fas fa-hospital-user"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Patients</h3>
+              <p class="stat-number">{{ patientCount }}</p>
+              <span class="stat-link">View medical records →</span>
+            </div>
+          </div>
+
+          <!-- Appointments Stat -->
+          <div class="stat-card stat-blue" routerLink="/appointments">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Appointments</h3>
+              <p class="stat-number">{{ appointmentCount }}</p>
+              <span class="stat-link">Manage appointment schedules →</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Stats and Quick Actions Grid -->
+        <div class="dashboard-details-grid">
+          <!-- Appointment Status Breakdown -->
+          <div class="details-card appointment-status-card">
+            <h2>Appointment Summary</h2>
+            <p class="card-subtitle">Active breakdown of scheduling status</p>
+            
+            <div class="breakdown-list">
+              <div class="breakdown-item item-scheduled">
+                <span class="badge badge-scheduled"><i class="fas fa-clock"></i> Scheduled</span>
+                <span class="breakdown-number">{{ scheduledCount }}</span>
+              </div>
+              <div class="breakdown-item item-completed">
+                <span class="badge badge-completed"><i class="fas fa-check-circle"></i> Completed</span>
+                <span class="breakdown-number">{{ completedCount }}</span>
+              </div>
+              <div class="breakdown-item item-cancelled">
+                <span class="badge badge-cancelled"><i class="fas fa-times-circle"></i> Cancelled</span>
+                <span class="breakdown-number">{{ cancelledCount }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Shortcuts -->
+          <div class="details-card shortcuts-card">
+            <h2>Quick Shortcuts</h2>
+            <p class="card-subtitle">Common operations and registry shortcuts</p>
+            <div class="shortcuts-grid">
+              <a routerLink="/doctors/add" class="shortcut-btn">
+                <i class="fas fa-user-plus text-teal"></i>
+                <span>Add Doctor</span>
+              </a>
+              <a routerLink="/patients/add" class="shortcut-btn">
+                <i class="fas fa-address-card text-indigo"></i>
+                <span>Register Patient</span>
+              </a>
+              <a routerLink="/appointments/add" class="shortcut-btn">
+                <i class="fas fa-calendar-alt text-blue"></i>
+                <span>Book Appointment</span>
+              </a>
+              <a href="http://localhost:4000/api/health" target="_blank" class="shortcut-btn">
+                <i class="fas fa-server text-muted"></i>
+                <span>API Health Check</span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Appointments Section -->
+        <div class="recent-appointments-section">
+          <div class="section-header">
+            <h2>Recent Appointments</h2>
+            <a routerLink="/appointments" class="view-all-link">View All Appointments</a>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="recentAppointments.length === 0" class="empty-state">
+            <i class="far fa-calendar-times"></i>
+            <h3>No Appointments Found</h3>
+            <p>There are no appointments registered in the database yet. Get started by booking one.</p>
+            <button routerLink="/appointments/add" class="btn btn-primary">Book First Appointment</button>
+          </div>
+
+          <!-- Recent Appointments Table -->
+          <div *ngIf="recentAppointments.length > 0" class="table-responsive">
+            <table class="table-premium">
+              <thead>
+                <tr>
+                  <th>Patient</th>
+                  <th>Assigned Doctor</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let app of recentAppointments">
+                  <td>
+                    <div class="patient-cell">
+                      <i class="fas fa-user"></i>
+                      <span>{{ app.patient?.name || 'Unknown Patient' }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="doctor-cell">
+                      <i class="fas fa-user-md text-teal"></i>
+                      <span>{{ app.doctor?.name || 'Unassigned Doctor' }}</span>
+                    </div>
+                  </td>
+                  <td>{{ app.date | date:'mediumDate' }}</td>
+                  <td>
+                    <span [class]="'badge badge-' + app.status.toLowerCase()">
+                      <i [class]="app.status === 'Scheduled' ? 'fas fa-clock' : app.status === 'Completed' ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                      {{ app.status }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           PATIENT PORTAL VIEW
+           ========================================== -->
+      <div *ngIf="user.role !== 'admin'" class="patient-portal-card fade-in">
+        <div class="patient-portal-header">
+          <div class="portal-icon-container">
+            <i class="fas fa-heartbeat text-teal"></i>
+          </div>
+          <div class="portal-title-text">
+            <h2>Patient Services Dashboard</h2>
+            <p>Manage your patients, medical files, and appointment schedule securely</p>
+          </div>
+        </div>
+        
+        <div class="patient-welcome-box">
+          <h3>Welcome, {{ user.name }}</h3>
+          <p>Coordinate care and schedule appointments with our board-certified medical team for all registered patient profiles in your account.</p>
+        </div>
+
+        <!-- Patient Stat Cards Grid -->
+        <div class="stats-grid" style="margin-top: 30px;">
+          <!-- Doctors Stat -->
+          <div class="stat-card stat-teal" routerLink="/doctors">
+            <div class="stat-icon">
+              <i class="fas fa-user-md"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Our Doctors</h3>
+              <p class="stat-number">{{ doctorCount }}</p>
+              <span class="stat-link">View clinical specialists →</span>
+            </div>
+          </div>
+
+          <!-- Patients Stat -->
+          <div class="stat-card stat-indigo" routerLink="/patients">
+            <div class="stat-icon">
+              <i class="fas fa-hospital-user"></i>
+            </div>
+            <div class="stat-info">
+              <h3>Registered Patients</h3>
+              <p class="stat-number">{{ patientCount }}</p>
+              <span class="stat-link">Manage family profiles →</span>
+            </div>
+          </div>
+
+          <!-- Appointments Stat -->
+          <div class="stat-card stat-blue" routerLink="/appointments">
+            <div class="stat-icon">
+              <i class="fas fa-calendar-check"></i>
+            </div>
+            <div class="stat-info">
+              <h3>My Appointments</h3>
+              <p class="stat-number">{{ appointmentCount }}</p>
+              <span class="stat-link">Manage schedules & history →</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detailed Stats and Quick Actions Grid -->
+        <div class="dashboard-details-grid">
+          <!-- Quick Shortcuts -->
+          <div class="details-card shortcuts-card">
+            <h2>Quick Shortcuts</h2>
+            <p class="card-subtitle">Common operations and registry shortcuts</p>
+            <div class="shortcuts-grid">
+              <a routerLink="/patients/add" class="shortcut-btn">
+                <i class="fas fa-address-card text-indigo"></i>
+                <span>Register Patient</span>
+              </a>
+              <a routerLink="/appointments/add" class="shortcut-btn">
+                <i class="fas fa-calendar-alt text-blue"></i>
+                <span>Book Appointment</span>
+              </a>
+              <a routerLink="/doctors" class="shortcut-btn">
+                <i class="fas fa-user-md text-teal"></i>
+                <span>View Doctors</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Info Cards Stack -->
+          <div style="display: flex; flex-direction: column; gap: 20px;">
+            <div class="info-card" style="background: var(--primary-light); padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(13, 148, 136, 0.15); display: flex; flex-direction: column; justify-content: center; flex: 1;">
+              <h4 style="color: var(--primary-hover); margin-bottom: 8px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; margin-top: 0;">
+                <i class="fas fa-info-circle"></i> Care Assistance
+              </h4>
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin: 0;">
+                For general support, prescription questions, or special assistance, call our outpatient care desk at <strong>(555) 019-9000</strong>.
+              </p>
+            </div>
+
+            <div class="info-card" style="background: #fee2e2; padding: 20px; border-radius: var(--radius-md); border: 1px solid rgba(239, 68, 68, 0.15); display: flex; flex-direction: column; justify-content: center; flex: 1;">
+              <h4 style="color: #b91c1c; margin-bottom: 8px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px; margin-top: 0;">
+                <i class="fas fa-exclamation-triangle"></i> Emergency Care
+              </h4>
+              <p style="font-size: 0.9rem; color: #7f1d1d; margin: 0;">
+                In a medical emergency, do not schedule online. Call <strong>911</strong> immediately or visit the nearest ER.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Appointments Section -->
+        <div class="recent-appointments-section" style="margin-top: 40px;">
+          <div class="section-header">
+            <h2>Recent Appointments</h2>
+            <a routerLink="/appointments" class="view-all-link">View All My Appointments</a>
+          </div>
+
+          <!-- Empty State -->
+          <div *ngIf="recentAppointments.length === 0" class="empty-state">
+            <i class="far fa-calendar-times"></i>
+            <h3>No Appointments Booked</h3>
+            <p>You haven't scheduled any appointments for your patients yet. Book your first appointment to get started.</p>
+            <button routerLink="/appointments/add" class="btn btn-primary">Book Appointment</button>
+          </div>
+
+          <!-- Recent Appointments Table -->
+          <div *ngIf="recentAppointments.length > 0" class="table-responsive">
+            <table class="table-premium">
+              <thead>
+                <tr>
+                  <th>Patient</th>
+                  <th>Assigned Doctor</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let app of recentAppointments">
+                  <td>
+                    <div class="patient-cell">
+                      <i class="fas fa-user"></i>
+                      <span>{{ app.patient?.name || 'Unknown Patient' }}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="doctor-cell">
+                      <i class="fas fa-user-md text-teal"></i>
+                      <span>{{ app.doctor?.name || 'Unassigned Doctor' }}</span>
+                    </div>
+                  </td>
+                  <td>{{ app.date | date:'mediumDate' }}</td>
+                  <td>
+                    <span [class]="'badge badge-' + app.status.toLowerCase()">
+                      <i [class]="app.status === 'Scheduled' ? 'fas fa-clock' : app.status === 'Completed' ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+                      {{ app.status }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
-  </section>
+  </div>
 </div>

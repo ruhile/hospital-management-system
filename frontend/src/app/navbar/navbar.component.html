@@ -1,13 +1,25 @@
 <nav class="navbar">
-  <div class="navbar-brand">
-    <img src="assets/icons/hospital-logo.png" alt="Hospital Logo" class="logo">
+  <div class="navbar-brand" routerLink="/">
+    <img src="assets/icons/hospital-logo.png" alt="Hospital Logo" class="logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/883/883407.png'">
     <span>Hospital Management System</span>
   </div>
 
-  <ul class="navbar-links">
+  <ul class="navbar-links" *ngIf="authService.currentUser$ | async as user; else guestNav">
     <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
     <li><a routerLink="/doctors" routerLinkActive="active">Doctors</a></li>
     <li><a routerLink="/patients" routerLinkActive="active">Patients</a></li>
     <li><a routerLink="/appointments" routerLinkActive="active">Appointments</a></li>
+    <li class="user-identity">
+      <span class="user-name"><i class="fas fa-user-circle"></i> {{ user.name }}</span>
+      <button (click)="logout()" class="nav-logout-btn"><i class="fas fa-sign-out-alt"></i> Logout</button>
+    </li>
   </ul>
+
+  <ng-template #guestNav>
+    <ul class="navbar-links">
+      <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a></li>
+      <li><a routerLink="/login" routerLinkActive="active" class="nav-auth-link">Login</a></li>
+      <li><a routerLink="/register" routerLinkActive="active" class="nav-auth-link register-highlight">Register</a></li>
+    </ul>
+  </ng-template>
 </nav>

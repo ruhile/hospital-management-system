@@ -1,46 +1,53 @@
-<div class="form-container">
-  <h2>{{ isEditMode ? 'Edit Doctor' : 'Add Doctor' }}</h2>
+<div class="container fade-in">
+  <div class="form-card">
+    <h2 class="form-title">
+      <i class="fas fa-user-md text-teal"></i>
+      <span>{{ isEditMode ? 'Edit Doctor Profile' : 'Add New Doctor' }}</span>
+    </h2>
 
-  <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()">
-    <!-- Name -->
-    <div class="form-group">
-      <label for="name">Name</label>
-      <input id="name" type="text" formControlName="name" />
-      <div *ngIf="doctorForm.get('name')?.touched && doctorForm.get('name')?.invalid" class="error">
-        Name is required.
+    <form [formGroup]="doctorForm" (ngSubmit)="onSubmit()">
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input id="name" type="text" class="form-control" formControlName="name" placeholder="e.g. Dr. Helen Carter"
+               [class.invalid]="doctorForm.get('name')?.touched && doctorForm.get('name')?.invalid" />
+        <div *ngIf="doctorForm.get('name')?.touched && doctorForm.get('name')?.invalid" class="form-error">
+          <i class="fas fa-exclamation-circle"></i> Name is required.
+        </div>
       </div>
-    </div>
 
-    <!-- Specialization -->
-    <div class="form-group">
-      <label for="specialization">Specialization</label>
-      <input id="specialization" type="text" formControlName="specialization" />
-      <div *ngIf="doctorForm.get('specialization')?.touched && doctorForm.get('specialization')?.invalid" class="error">
-        Specialization is required.
+      <!-- Specialization -->
+      <div class="form-group">
+        <label for="specialization">Medical Specialization</label>
+        <input id="specialization" type="text" class="form-control" formControlName="specialization" placeholder="e.g. Cardiology, Pediatrics"
+               [class.invalid]="doctorForm.get('specialization')?.touched && doctorForm.get('specialization')?.invalid" />
+        <div *ngIf="doctorForm.get('specialization')?.touched && doctorForm.get('specialization')?.invalid" class="form-error">
+          <i class="fas fa-exclamation-circle"></i> Specialization is required.
+        </div>
       </div>
-    </div>
 
-    <!-- Availability (Checkbox group) -->
-    <div class="form-group">
-      <label>Availability</label>
-      <div class="checkbox-group">
-        <label *ngFor="let day of days">
-          <input type="checkbox" [value]="day" (change)="onDayChange($event)" 
-            [checked]="doctorForm.value.availability.includes(day)" />
-          {{ day }}
-        </label>
+      <!-- Availability (Checkbox group) -->
+      <div class="form-group">
+        <label>Consulting Days (Availability)</label>
+        <div class="checkbox-container-grid">
+          <label *ngFor="let day of days" class="checkbox-tile" [class.checked]="doctorForm.value.availability.includes(day)">
+            <input type="checkbox" [value]="day" (change)="onDayChange($event)" 
+                   [checked]="doctorForm.value.availability.includes(day)" />
+            <span>{{ day }}</span>
+          </label>
+        </div>
+        <div *ngIf="doctorForm.get('availability')?.touched && doctorForm.get('availability')?.invalid" class="form-error" style="margin-top: 10px;">
+          <i class="fas fa-exclamation-circle"></i> Please select at least one consulting day.
+        </div>
       </div>
-      <div *ngIf="doctorForm.get('availability')?.touched && doctorForm.get('availability')?.invalid" class="error">
-        Please select at least one day.
-      </div>
-    </div>
 
-    <!-- Buttons -->
-    <div class="form-actions">
-      <button type="submit" class="btn-submit" [disabled]="doctorForm.invalid">
-        {{ isEditMode ? 'Update Doctor' : 'Add Doctor' }}
-      </button>
-      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
-    </div>
-  </form>
+      <!-- Buttons -->
+      <div class="form-actions" style="margin-top: 30px; display: flex; gap: 12px; justify-content: flex-end;">
+        <button type="button" class="btn btn-outline" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="doctorForm.invalid">
+          <i class="fas fa-check"></i> {{ isEditMode ? 'Save Profile' : 'Register Doctor' }}
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

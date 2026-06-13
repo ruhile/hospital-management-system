@@ -1,67 +1,164 @@
-.details-container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
-  text-align: center;
+.details-card-container {
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+  padding: 40px;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
-h2 {
-  margin-bottom: 20px;
-  color: #023e8a;
+.details-card-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 24px;
+  margin-bottom: 24px;
 }
 
-.details-card {
-  background: #ffffff;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
-  text-align: left;
+.details-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  background-color: var(--secondary-light);
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
 }
 
-.details-card h3 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #0077b6;
+.details-header-info h1 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-main);
 }
 
-.details-card p {
-  font-size: 1rem;
-  margin: 8px 0;
-  color: #333;
+.specialization-tag {
+  display: inline-block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--secondary-color);
+  background-color: var(--secondary-light);
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  margin-top: 6px;
 }
 
-.appointments {
-  margin-top: 20px;
-}
-.appointments h4 {
-  margin-bottom: 10px;
-  color: #0096c7;
-}
-.appointments ul {
-  list-style: disc;
-  padding-left: 20px;
-}
-.appointments li {
-  margin: 5px 0;
+/* Body */
+.details-card-body {
+  margin-bottom: 32px;
 }
 
-.not-found {
-  text-align: center;
+.detail-section h2 {
   font-size: 1.2rem;
-  color: #d90429;
-  margin-bottom: 15px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.btn-back {
-  margin-top: 20px;
-  background-color: #0077b6;
-  color: white;
-  border: none;
-  padding: 10px 18px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
+.notes-box {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  padding: 20px;
+  border-radius: var(--radius-md);
+  color: var(--text-main);
+  line-height: 1.6;
 }
-.btn-back:hover {
-  background-color: #023e8a;
+
+/* Timeline */
+.empty-appointments-box {
+  text-align: center;
+  padding: 30px;
+  background: var(--bg-color);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  border: 1px dashed var(--border-color);
+  font-size: 0.95rem;
+}
+
+.empty-appointments-box i {
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.appointments-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  padding-left: 20px;
+  border-left: 2px solid var(--border-color);
+}
+
+.timeline-item {
+  position: relative;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -27px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+  border: 2px solid var(--card-bg);
+}
+
+.timeline-dot.scheduled { background-color: var(--status-scheduled); }
+.timeline-dot.completed { background-color: var(--status-completed); }
+.timeline-dot.cancelled { background-color: var(--status-cancelled); }
+
+.timeline-content {
+  background: var(--bg-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.timeline-date {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.timeline-doctor {
+  font-size: 0.92rem;
+  color: var(--text-main);
+}
+
+.doc-spec {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* Actions */
+.details-card-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  border-top: 1px solid var(--border-color);
+  padding-top: 24px;
+}
+@media (max-width: 576px) {
+  .details-card-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .details-card-actions {
+    flex-direction: column;
+  }
 }

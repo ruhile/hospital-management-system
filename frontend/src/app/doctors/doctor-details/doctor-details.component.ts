@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DoctorService } from '../../doctor.service';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-doctor-details',
@@ -15,7 +16,8 @@ export class DoctorDetailsComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private doctorSvc: DoctorService
+    private doctorSvc: DoctorService,
+    public authService: AuthService
   ) {}
 
   ngOnInit(): void {

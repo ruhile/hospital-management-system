@@ -1,20 +1,56 @@
-<div class="details-container" *ngIf="doctor; else notFound">
-  <h2>Doctor Profile</h2>
-
-  <div class="details-card">
-    <h3>{{ doctor.name }}</h3>
-    <p><strong>Specialization:</strong> {{ doctor.specialization }}</p>
-
-    <p><strong>Availability:</strong></p>
-    <div class="availability-badges">
-      <span *ngFor="let day of doctor.availability" class="badge">{{ day }}</span>
+<div class="container fade-in">
+  <div class="details-card-container" *ngIf="doctor; else notFound">
+    <div class="details-card-header">
+      <div class="details-avatar">
+        <i class="fas fa-user-md"></i>
+      </div>
+      <div class="details-header-info">
+        <h1>Dr. {{ doctor.name }}</h1>
+        <span class="specialization-tag">{{ doctor.specialization }}</span>
+      </div>
     </div>
 
-    <button class="btn-back" (click)="goBack()">Back to Doctors</button>
+    <div class="details-card-body">
+      <div class="detail-section">
+        <h2><i class="far fa-calendar-alt text-teal"></i> Weekly Availability Schedule</h2>
+        <p class="section-description">Days of the week this specialist is available for patient consultations.</p>
+        <div class="detail-availability-grid">
+          <div *ngFor="let day of ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']" 
+               class="detail-day-card" 
+               [class.available]="doctor.availability.includes(day.substring(0, 3))">
+            <i class="fas" [class.fa-check-circle]="doctor.availability.includes(day.substring(0, 3))" [class.fa-minus-circle]="!doctor.availability.includes(day.substring(0, 3))"></i>
+            <span>{{ day }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section" style="margin-top: 30px;">
+        <h2><i class="fas fa-info-circle text-teal"></i> Professional Summary</h2>
+        <p style="color: var(--text-muted); line-height: 1.6;">
+          Dr. {{ doctor.name }} is a registered specialist in {{ doctor.specialization }} in our healthcare center. 
+          To book a consultation or check scheduling slot availability, please visit the Appointments page.
+        </p>
+      </div>
+    </div>
+
+    <div class="details-card-actions">
+      <button class="btn btn-outline" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Back to Directory
+      </button>
+      <a [routerLink]="['/doctors/edit', doctor._id]" class="btn btn-primary" *ngIf="authService.currentUserValue?.role === 'admin'">
+        <i class="fas fa-edit"></i> Edit Profile
+      </a>
+    </div>
   </div>
 </div>
 
 <ng-template #notFound>
-  <p class="not-found">Doctor not found.</p>
-  <button class="btn-back" (click)="goBack()">Back</button>
+  <div class="container text-center fade-in">
+    <div class="empty-state">
+      <i class="fas fa-user-slash text-danger"></i>
+      <h3>Specialist Profile Not Found</h3>
+      <p>The doctor profile you are looking for may have been deleted or the ID is invalid.</p>
+      <button class="btn btn-primary" (click)="goBack()">Back to Doctors</button>
+    </div>
+  </div>
 </ng-template>

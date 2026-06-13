@@ -3,12 +3,23 @@ import { RouterModule, Routes } from '@angular/router';
 import { DoctorListComponent } from './doctor-list/doctor-list.component';
 import { DoctorFormComponent } from './doctor-form/doctor-form.component';
 import { DoctorDetailsComponent } from './doctor-details/doctor-details.component';
+import { RoleGuard } from '../auth/role.guard';
 
 const routes: Routes = [
-  { path: '', component: DoctorListComponent },           // /doctors
-  { path: 'add', component: DoctorFormComponent },        // /doctors/add
-  { path: 'edit/:id', component: DoctorFormComponent },    // /doctors/edit/1
-  { path: 'details/:id', component: DoctorDetailsComponent }  // ✅ new
+  { path: '', component: DoctorListComponent },
+  { 
+    path: 'add', 
+    component: DoctorFormComponent,
+    canActivate: [RoleGuard],
+    data: { roles: ['admin'] }
+  },
+  { 
+    path: 'edit/:id', 
+    component: DoctorFormComponent,
+    canActivate: [RoleGuard],
+    data: { roles: ['admin'] }
+  },
+  { path: 'details/:id', component: DoctorDetailsComponent }
 ];
 
 @NgModule({

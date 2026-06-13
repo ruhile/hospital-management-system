@@ -1,32 +1,71 @@
-<div class="details-container" *ngIf="patient; else notFound">
-  <h2>Patient Profile</h2>
-
-  <div class="details-card">
-    <h3>{{ patient.name }}</h3>
-    <p><strong>Age:</strong> {{ patient.age }}</p>
-    <p><strong>Medical History:</strong> {{ patient.medicalHistory || 'N/A' }}</p>
-
-    <!-- Show Appointments -->
-    <div class="appointments" *ngIf="patient.appointments?.length > 0">
-      <h4>Appointments</h4>
-      <ul>
-        <li *ngFor="let app of patient.appointments">
-          <strong>Date:</strong> {{ app.date | date:'medium' }} <br />
-          <strong>Doctor:</strong> {{ app.doctor?.name }} ({{ app.doctor?.specialization }}) <br />
-          <strong>Status:</strong> {{ app.status }}
-        </li>
-      </ul>
+<div class="container fade-in">
+  <div class="details-card-container" *ngIf="patient; else notFound">
+    <div class="details-card-header">
+      <div class="details-avatar">
+        <i class="fas fa-hospital-user"></i>
+      </div>
+      <div class="details-header-info">
+        <h1>{{ patient.name }}</h1>
+        <span class="specialization-tag">Age: {{ patient.age }} Years</span>
+      </div>
     </div>
 
-    <div *ngIf="patient?.appointments?.length === 0">
-      <p><em>No upcoming appointments</em></p>
+    <div class="details-card-body">
+      <!-- Medical History -->
+      <div class="detail-section">
+        <h2><i class="fas fa-notes-medical text-indigo"></i> Clinical History & Notes</h2>
+        <div class="notes-box">
+          <p>{{ patient.medicalHistory || 'No medical history or clinical notes recorded for this patient.' }}</p>
+        </div>
+      </div>
+
+      <!-- Appointments list -->
+      <div class="detail-section" style="margin-top: 32px;">
+        <h2><i class="far fa-calendar-check text-indigo"></i> Consultation History</h2>
+        
+        <!-- Empty State for Appointments -->
+        <div *ngIf="!patient.appointments || patient.appointments.length === 0" class="empty-appointments-box">
+          <i class="far fa-calendar-times"></i>
+          <p>No appointments recorded for this patient.</p>
+        </div>
+
+        <!-- Appointment Timeline -->
+        <div *ngIf="patient.appointments && patient.appointments.length > 0" class="appointments-timeline">
+          <div *ngFor="let app of patient.appointments" class="timeline-item">
+            <div class="timeline-dot" [class.scheduled]="app.status === 'Scheduled'" [class.completed]="app.status === 'Completed'" [class.cancelled]="app.status === 'Cancelled'"></div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <span class="timeline-date">{{ app.date | date:'mediumDate' }}</span>
+                <span [class]="'badge badge-' + app.status.toLowerCase()">{{ app.status }}</span>
+              </div>
+              <p class="timeline-doctor">
+                Consultant: <strong>Dr. {{ app.doctor?.name || 'Unassigned Doctor' }}</strong> 
+                <span *ngIf="app.doctor?.specialization" class="doc-spec">({{ app.doctor.specialization }})</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <button class="btn-back" (click)="goBack()">Back to Patients</button>
+    <div class="details-card-actions">
+      <button class="btn btn-outline" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Back to Registry
+      </button>
+      <a [routerLink]="['/patients/edit', patient._id]" class="btn btn-secondary">
+        <i class="fas fa-edit"></i> Edit Record
+      </a>
+    </div>
   </div>
 </div>
 
 <ng-template #notFound>
-  <p class="not-found">Patient not found.</p>
-  <button class="btn-back" (click)="goBack()">Back</button>
+  <div class="container text-center fade-in">
+    <div class="empty-state">
+      <i class="fas fa-user-slash text-danger"></i>
+      <h3>Patient Record Not Found</h3>
+      <p>The patient profile you are looking for may have been deleted or the ID is invalid.</p>
+      <button class="btn btn-primary" (click)="goBack()">Back to Patients</button>
+    </div>
+  </div>
 </ng-template>

@@ -1,57 +1,70 @@
-<div class="form-container">
-  <h2>{{ isEditMode ? 'Edit Appointment' : 'Book Appointment' }}</h2>
+<div class="container fade-in">
+  <div class="form-card">
+    <h2 class="form-title">
+      <i class="fas fa-calendar-check text-blue"></i>
+      <span>{{ isEditMode ? 'Edit Appointment' : 'Book Appointment' }}</span>
+    </h2>
 
-  <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
-
-    <!-- Select Patient -->
-    <div class="form-group">
-      <label for="patientName">Patient</label>
-      <select id="patientName" formControlName="patient">
-        <option value="">-- Select Patient --</option>
-        <option *ngFor="let p of patients || []" [value]="p._id">{{ p.name }}</option>
-      </select>
-      <div *ngIf="appointmentForm.get('patient')?.touched && appointmentForm.get('patient')?.invalid" class="error">
-        Patient is required.
+    <form [formGroup]="appointmentForm" (ngSubmit)="onSubmit()">
+      <!-- Select Patient -->
+      <div class="form-group">
+        <label for="patientName">Patient Profile</label>
+        <select id="patientName" class="form-control" formControlName="patient"
+                [class.invalid]="appointmentForm.get('patient')?.touched && appointmentForm.get('patient')?.invalid">
+          <option value="">-- Select Patient --</option>
+          <option *ngFor="let p of patients || []" [value]="p._id">{{ p.name }} (Age: {{ p.age }})</option>
+        </select>
+        <div *ngIf="appointmentForm.get('patient')?.touched && appointmentForm.get('patient')?.invalid" class="form-error">
+          <i class="fas fa-exclamation-circle"></i> Patient selection is required.
+        </div>
       </div>
-    </div>
 
-    <!-- Select Doctor -->
-    <div class="form-group">
-      <label for="doctorName">Doctor</label>
-      <select id="doctorName" formControlName="doctor">
-        <option value="">-- Select Doctor --</option>
-        <option *ngFor="let d of doctors" [value]="d._id">{{ d.name }} ({{ d.specialization }})</option>
-      </select>
-      <div *ngIf="appointmentForm.get('doctor')?.touched && appointmentForm.get('doctor')?.invalid" class="error">
-        Doctor is required.
+      <!-- Select Doctor -->
+      <div class="form-group">
+        <label for="doctorName">Assigned Doctor</label>
+        <select id="doctorName" class="form-control" formControlName="doctor"
+                [class.invalid]="appointmentForm.get('doctor')?.touched && appointmentForm.get('doctor')?.invalid">
+          <option value="">-- Select Doctor --</option>
+          <option *ngFor="let d of doctors" [value]="d._id">Dr. {{ d.name }} ({{ d.specialization }})</option>
+        </select>
+        <div *ngIf="appointmentForm.get('doctor')?.touched && appointmentForm.get('doctor')?.invalid" class="form-error">
+          <i class="fas fa-exclamation-circle"></i> Doctor selection is required.
+        </div>
       </div>
-    </div>
 
-    <!-- Date -->
-    <div class="form-group">
-      <label for="date">Date</label>
-      <input id="date" type="date" formControlName="date" />
-      <div *ngIf="appointmentForm.get('date')?.touched && appointmentForm.get('date')?.invalid" class="error">
-        Date is required.
+      <!-- Date -->
+      <div class="form-group">
+        <label for="date">Appointment Date</label>
+        <input id="date" type="date" class="form-control" formControlName="date"
+               [class.invalid]="appointmentForm.get('date')?.touched && appointmentForm.get('date')?.invalid" />
+        <div *ngIf="appointmentForm.get('date')?.touched && appointmentForm.get('date')?.invalid" class="form-error">
+          <i class="fas fa-exclamation-circle"></i> Appointment date is required.
+        </div>
       </div>
-    </div>
 
-    <!-- Status -->
-    <div class="form-group">
-      <label for="status">Status</label>
-      <select id="status" formControlName="status">
-        <option value="Scheduled">Scheduled</option>
-        <option value="Completed">Completed</option>
-        <option value="Cancelled">Cancelled</option>
-      </select>
-    </div>
+      <!-- Availability Warning Banner -->
+      <div *ngIf="doctorAvailabilityWarning" class="alert-warning-banner">
+        <i class="fas fa-info-circle"></i>
+        <span>{{ doctorAvailabilityWarning }}</span>
+      </div>
 
-    <!-- Buttons -->
-    <div class="form-actions">
-      <button type="submit" class="btn-submit" [disabled]="appointmentForm.invalid">
-        {{ isEditMode ? 'Update Appointment' : 'Book Appointment' }}
-      </button>
-      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
-    </div>
-  </form>
+      <!-- Status -->
+      <div *ngIf="isEditMode" class="form-group">
+        <label for="status">Consultation Status</label>
+        <select id="status" class="form-control" formControlName="status">
+          <option value="Scheduled">Scheduled</option>
+          <option value="Completed">Completed</option>
+          <option value="Cancelled">Cancelled</option>
+        </select>
+      </div>
+
+      <!-- Buttons -->
+      <div class="form-actions" style="margin-top: 30px; display: flex; gap: 12px; justify-content: flex-end;">
+        <button type="button" class="btn btn-outline" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="appointmentForm.invalid">
+          <i class="fas fa-check"></i> {{ isEditMode ? 'Save Changes' : 'Confirm Booking' }}
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

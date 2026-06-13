@@ -1,0 +1,112 @@
+<div class="auth-container fade-in">
+  <div class="auth-card">
+    <div class="auth-header">
+      <img src="assets/icons/hospital-logo.png" alt="Hospital Logo" class="auth-logo" onerror="this.src='https://cdn-icons-png.flaticon.com/512/883/883407.png'">
+      <h2>Create Account</h2>
+      <p>Register as a staff member or administrator</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <div class="input-wrapper">
+          <i class="fas fa-user input-icon"></i>
+          <input 
+            type="text" 
+            id="name" 
+            formControlName="name" 
+            class="form-control" 
+            [class.invalid]="submitted && f['name'].errors"
+            placeholder="John Doe"
+            autocomplete="name">
+        </div>
+        <div *ngIf="submitted && f['name'].errors" class="form-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="f['name'].errors['required']">Full name is required</span>
+          <span *ngIf="f['name'].errors['minlength']">Name must be at least 2 characters</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <div class="input-wrapper">
+          <i class="fas fa-envelope input-icon"></i>
+          <input 
+            type="email" 
+            id="email" 
+            formControlName="email" 
+            class="form-control" 
+            [class.invalid]="submitted && f['email'].errors"
+            placeholder="john@hospital.com"
+            autocomplete="email">
+        </div>
+        <div *ngIf="submitted && f['email'].errors" class="form-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="f['email'].errors['required']">Email is required</span>
+          <span *ngIf="f['email'].errors['email']">Please enter a valid email address</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-lock input-icon"></i>
+          <input 
+            type="password" 
+            id="password" 
+            formControlName="password" 
+            class="form-control" 
+            [class.invalid]="submitted && f['password'].errors"
+            placeholder="••••••••"
+            autocomplete="new-password">
+        </div>
+        <div *ngIf="submitted && f['password'].errors" class="form-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="f['password'].errors['required']">Password is required</span>
+          <span *ngIf="f['password'].errors['minlength']">Password must be at least 6 characters</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="input-wrapper">
+          <i class="fas fa-shield-alt input-icon"></i>
+          <input 
+            type="password" 
+            id="confirmPassword" 
+            formControlName="confirmPassword" 
+            class="form-control" 
+            [class.invalid]="submitted && (f['confirmPassword'].errors || registerForm.errors?.['passwordMismatch'])"
+            placeholder="••••••••"
+            autocomplete="new-password">
+        </div>
+        <div *ngIf="submitted && (f['confirmPassword'].errors || registerForm.errors?.['passwordMismatch'])" class="form-error">
+          <i class="fas fa-exclamation-circle"></i>
+          <span *ngIf="f['confirmPassword'].errors?.['required']">Please confirm your password</span>
+          <span *ngIf="!f['confirmPassword'].errors?.['required'] && registerForm.errors?.['passwordMismatch']">Passwords do not match</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="role">Account Type</label>
+        <div class="input-wrapper">
+          <i class="fas fa-users-cog input-icon"></i>
+          <select id="role" formControlName="role" class="form-control" style="appearance: none; -webkit-appearance: none;">
+            <option value="patient">Patient Portal Account</option>
+            <option value="admin">Administrator Dashboard Account</option>
+          </select>
+          <i class="fas fa-chevron-down" style="position: absolute; right: 16px; color: var(--text-muted); pointer-events: none;"></i>
+        </div>
+      </div>
+
+      <button type="submit" [disabled]="loading" class="btn btn-primary btn-block">
+        <span *ngIf="!loading">Create Account <i class="fas fa-user-plus"></i></span>
+        <span *ngIf="loading" class="btn-spinner"></span>
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>Already have an account? <a routerLink="/login">Sign In</a></p>
+    </div>
+  </div>
+</div>

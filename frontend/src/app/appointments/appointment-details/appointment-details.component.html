@@ -1,26 +1,64 @@
-<div class="details-container" *ngIf="appointment; else notFound">
-  <h2>Appointment Details</h2>
+<div class="container fade-in">
+  <div class="details-card-container" *ngIf="appointment; else notFound">
+    <div class="details-card-header">
+      <div class="details-avatar" [class.scheduled]="appointment.status === 'Scheduled'" [class.completed]="appointment.status === 'Completed'" [class.cancelled]="appointment.status === 'Cancelled'">
+        <i [class]="appointment.status === 'Scheduled' ? 'fas fa-clock' : appointment.status === 'Completed' ? 'fas fa-check-circle' : 'fas fa-times-circle'"></i>
+      </div>
+      <div class="details-header-info">
+        <h1>Appointment Slip</h1>
+        <span [class]="'badge badge-' + appointment.status.toLowerCase()">{{ appointment.status }}</span>
+      </div>
+    </div>
 
-  <div class="details-card">
-    <p><strong>Patient:</strong> {{ appointment.patient?.name }} (Age: {{ appointment.patient?.age }})</p>
-    <p><strong>Doctor:</strong> {{ appointment.doctor?.name }} ({{ appointment.doctor?.specialization }})</p>
-    <p><strong>Date:</strong> {{ appointment.date | date:'mediumDate' }}</p>
-    <p>
-      <strong>Status:</strong>
-      <span [ngClass]="{
-        'status-scheduled': appointment.status === 'Scheduled',
-        'status-completed': appointment.status === 'Completed',
-        'status-cancelled': appointment.status === 'Cancelled'
-      }">
-        {{ appointment.status }}
-      </span>
-    </p>
+    <div class="details-card-body">
+      <!-- Info Grid -->
+      <div class="info-details-grid">
+        <div class="info-block">
+          <h3><i class="fas fa-hospital-user text-indigo"></i> Patient</h3>
+          <p class="info-title">{{ appointment.patient?.name || 'Unknown Patient' }}</p>
+          <p class="info-subtitle" *ngIf="appointment.patient?.age">Age: {{ appointment.patient.age }} Years</p>
+        </div>
 
-    <button class="btn-back" (click)="goBack()">Back to Appointments</button>
+        <div class="info-block">
+          <h3><i class="fas fa-user-md text-teal"></i> Assigned Specialist</h3>
+          <p class="info-title">Dr. {{ appointment.doctor?.name || 'Unassigned Doctor' }}</p>
+          <p class="info-subtitle" *ngIf="appointment.doctor?.specialization">{{ appointment.doctor.specialization }}</p>
+        </div>
+
+        <div class="info-block full-width">
+          <h3><i class="far fa-calendar-alt text-blue"></i> Schedule Date</h3>
+          <p class="info-title">{{ appointment.date | date:'fullDate' }}</p>
+          <p class="info-subtitle">Scheduled Session Slot</p>
+        </div>
+      </div>
+
+      <!-- Clinical notes quick preview -->
+      <div class="detail-section" style="margin-top: 32px;" *ngIf="appointment.patient?.medicalHistory">
+        <h2><i class="fas fa-file-medical text-indigo"></i> Patient Clinical History Note</h2>
+        <div class="notes-box">
+          <p>{{ appointment.patient.medicalHistory }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="details-card-actions">
+      <button class="btn btn-outline" (click)="goBack()">
+        <i class="fas fa-arrow-left"></i> Back to Schedule
+      </button>
+      <a [routerLink]="['/appointments/edit', appointment._id]" class="btn btn-primary">
+        <i class="fas fa-edit"></i> Edit / Reschedule
+      </a>
+    </div>
   </div>
 </div>
 
 <ng-template #notFound>
-  <p class="not-found">Appointment not found.</p>
-  <button class="btn-back" (click)="goBack()">Back</button>
+  <div class="container text-center fade-in">
+    <div class="empty-state">
+      <i class="fas fa-calendar-times text-danger"></i>
+      <h3>Appointment Slot Not Found</h3>
+      <p>The appointment schedule you are looking for may have been cancelled or the ID is invalid.</p>
+      <button class="btn btn-primary" (click)="goBack()">Back to Schedule</button>
+    </div>
+  </div>
 </ng-template>

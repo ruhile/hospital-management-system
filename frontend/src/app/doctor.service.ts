@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../environments/environment';
+
 @Injectable({ providedIn: 'root' })
 export class DoctorService {
-private base = 'https://hospital-backend-4qdr.onrender.com/api/doctors';
+  private base = `${environment.apiUrl}/api/doctors`;
   constructor(private http: HttpClient) {}
   list(params?: any) { return this.http.get<any>(this.base, { params }); }
   get(id: string) { return this.http.get<any>(`${this.base}/${id}`); }

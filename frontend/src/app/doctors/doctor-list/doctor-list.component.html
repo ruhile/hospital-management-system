@@ -1,28 +1,71 @@
-<div class="doctor-list-container">
-  <h2>Doctors</h2>
-  <a routerLink="/doctors/add" class="btn-add">+ Add Doctor</a>
+<div class="container fade-in">
+  <!-- Page Header -->
+  <header class="list-header">
+    <div>
+      <h1>Doctors Directory</h1>
+      <p>Manage medical specialists and active consultation shifts</p>
+    </div>
+    <a routerLink="/doctors/add" class="btn btn-primary" *ngIf="authService.currentUserValue?.role === 'admin'">
+      <i class="fas fa-plus"></i> Add New Doctor
+    </a>
+  </header>
 
-  <table class="doctor-table">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Specialization</th>
-        <th>Availability</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let doctor of doctors">
-        <td>{{ doctor.name }}</td>
-        <td>{{ doctor.specialization }}</td>
-        <td>{{ doctor.availability.join(', ') }}</td>
-        <td>
-          <!-- ✅ New Details Button -->
-          <a [routerLink]="['/doctors/details', doctor._id]" class="btn-details">Details</a>
-          <a [routerLink]="['/doctors/edit', doctor._id]" class="btn-edit">Edit</a>
-          <button (click)="deleteDoctor(doctor._id)" class="btn-delete">Delete</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <!-- Search & Filter Controls -->
+  <div class="search-filter-bar">
+    <div class="search-input-wrapper">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Search by name or medical specialty..." 
+             [(ngModel)]="searchTerm" (input)="applyFilter()" />
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="spinner-container">
+    <div class="spinner"></div>
+    <p>Loading medical staff directory...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && filteredDoctors.length === 0" class="empty-state">
+    <i class="fas fa-user-md-slash"></i>
+    <h3>No Doctors Found</h3>
+    <p>No records match your criteria. Try adjusting your search query or add a new doctor.</p>
+    <button routerLink="/doctors/add" class="btn btn-primary" *ngIf="authService.currentUserValue?.role === 'admin'">+ Register Doctor</button>
+  </div>
+
+  <!-- Grid of Doctor Cards -->
+  <div *ngIf="!loading && filteredDoctors.length > 0" class="grid-cards">
+    <div *ngFor="let doctor of filteredDoctors" class="doctor-card">
+      <div class="card-header">
+        <div class="avatar">
+          <i class="fas fa-user-md"></i>
+        </div>
+        <div class="header-text">
+          <h3>{{ doctor.name }}</h3>
+          <span class="specialty-badge">{{ doctor.specialization }}</span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <div class="availability-info">
+          <h4><i class="far fa-calendar-alt text-teal"></i> Availability</h4>
+          <div class="days-list">
+            <span *ngFor="let day of doctor.availability" class="day-tag">{{ day }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <a [routerLink]="['/doctors/details', doctor._id]" class="btn btn-outline btn-sm-flex" title="View Profile">
+          <i class="fas fa-id-card"></i> Profile
+        </a>
+        <a [routerLink]="['/doctors/edit', doctor._id]" class="btn btn-outline btn-sm-flex" title="Edit Info" *ngIf="authService.currentUserValue?.role === 'admin'">
+          <i class="fas fa-edit"></i> Edit
+        </a>
+        <button (click)="deleteDoctor(doctor._id)" class="btn btn-danger btn-sm-flex" title="Remove Doctor" *ngIf="authService.currentUserValue?.role === 'admin'">
+          <i class="fas fa-trash-alt"></i> Remove
+        </button>
+      </div>
+    </div>
+  </div>
 </div>

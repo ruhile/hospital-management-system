@@ -1,37 +1,45 @@
-<div class="form-container">
-  <h2>{{ isEditMode ? 'Edit Patient' : 'Add Patient' }}</h2>
+<div class="container fade-in">
+  <div class="form-card">
+    <h2 class="form-title">
+      <i class="fas fa-hospital-user text-indigo"></i>
+      <span>{{ isEditMode ? 'Edit Patient Profile' : 'Register Patient' }}</span>
+    </h2>
 
-  <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
-    <!-- Name -->
-    <div class="form-group">
-      <label for="name">Patient Name</label>
-      <input id="name" formControlName="name" type="text" placeholder="Enter patient's name">
-      <div *ngIf="patientForm.get('name')?.touched && patientForm.get('name')?.invalid" class="error">
-        Name is required.
+    <form [formGroup]="patientForm" (ngSubmit)="onSubmit()">
+      <!-- Name -->
+      <div class="form-group">
+        <label for="name">Patient Name</label>
+        <input id="name" class="form-control" formControlName="name" type="text" placeholder="e.g. John Doe"
+               [class.invalid]="patientForm.get('name')?.touched && patientForm.get('name')?.invalid" />
+        <div *ngIf="patientForm.get('name')?.touched && patientForm.get('name')?.invalid" class="form-error">
+          <i class="fas fa-exclamation-circle"></i> Patient name is required.
+        </div>
       </div>
-    </div>
 
-    <!-- Age -->
-    <div class="form-group">
-      <label for="age">Age</label>
-      <input id="age" formControlName="age" type="number" placeholder="Enter age">
-      <div *ngIf="patientForm.get('age')?.touched && patientForm.get('age')?.invalid" class="error">
-        Age must be greater than 0.
+      <!-- Age -->
+      <div class="form-group">
+        <label for="age">Age (Years)</label>
+        <input id="age" class="form-control" formControlName="age" type="number" placeholder="e.g. 34"
+               [class.invalid]="patientForm.get('age')?.touched && patientForm.get('age')?.invalid" />
+        <div *ngIf="patientForm.get('age')?.touched && patientForm.get('age')?.invalid" class="form-error">
+          <i class="fas fa-exclamation-circle"></i> Age must be greater than or equal to 0.
+        </div>
       </div>
-    </div>
 
-    <!-- Medical History -->
-    <div class="form-group">
-      <label for="medicalHistory">Medical History</label>
-      <textarea id="medicalHistory" formControlName="medicalHistory" placeholder="Eg: Diabetes, Hypertension"></textarea>
-    </div>
+      <!-- Medical History -->
+      <div class="form-group">
+        <label for="medicalHistory">Medical History & Notes</label>
+        <textarea id="medicalHistory" class="form-control" formControlName="medicalHistory" rows="4" 
+                  placeholder="e.g. Hypertension, penicillin allergy, family history of type 2 diabetes..."></textarea>
+      </div>
 
-    <!-- Buttons -->
-    <div class="form-actions">
-      <button type="submit" class="btn-submit" [disabled]="patientForm.invalid">
-        {{ isEditMode ? 'Update Patient' : 'Add Patient' }}
-      </button>
-      <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
-    </div>
-  </form>
+      <!-- Buttons -->
+      <div class="form-actions" style="margin-top: 30px; display: flex; gap: 12px; justify-content: flex-end;">
+        <button type="button" class="btn btn-outline" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn btn-secondary" [disabled]="patientForm.invalid">
+          <i class="fas fa-check"></i> {{ isEditMode ? 'Save Record' : 'Register Patient' }}
+        </button>
+      </div>
+    </form>
+  </div>
 </div>

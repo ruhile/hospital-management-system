@@ -1,92 +1,91 @@
-.appointment-list-container {
-  max-width: 950px;
-  margin: 40px auto;
-  padding: 20px;
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0px 4px 12px rgba(0,0,0,0.1);
+/* Page Layout */
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  gap: 20px;
 }
 
-h2 {
+.list-header h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.list-header p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-top: 4px;
+}
+
+/* Patient / Doctor cell info styling */
+.patient-cell-info, .doctor-cell-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.patient-cell-info i, .doctor-cell-info i {
+  font-size: 1.8rem;
+  color: var(--text-muted);
+}
+
+.patient-name, .doctor-name {
+  display: block;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--text-main);
+}
+
+.patient-sub, .doctor-sub {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Date cell */
+.date-cell {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* Empty State */
+.empty-state {
   text-align: center;
+  padding: 60px 40px;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.empty-state i {
+  font-size: 3.5rem;
+  color: var(--text-muted);
   margin-bottom: 20px;
-  color: #023e8a;
 }
 
-.btn-add {
-  display: inline-block;
-  margin-bottom: 15px;
-  padding: 10px 18px;
-  background-color: #0077b6;
-  color: white;
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-}
-.btn-add:hover {
-  background-color: #023e8a;
+.empty-state h3 {
+  font-size: 1.4rem;
+  margin-bottom: 8px;
 }
 
-/* Table Styling */
-.appointment-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.appointment-table th, .appointment-table td {
-  padding: 12px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
-}
-.appointment-table th {
-  background-color: #0096c7;
-  color: white;
+.empty-state p {
+  color: var(--text-muted);
+  max-width: 440px;
+  margin: 0 auto 20px;
 }
 
-/* Buttons */
-.btn-edit, .btn-delete {
-  margin: 0 5px;
-  padding: 6px 12px;
-  border-radius: 5px;
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: 0.3s;
-}
-
-.btn-edit {
-  background-color: #ffb703;
-  color: #fff;
-}
-.btn-edit:hover { background-color: #fb8500; }
-
-.btn-delete {
-  background-color: #d90429;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-.btn-delete:hover { background-color: #9d0208; }
-
-/* Status Colors */
-.status-scheduled {
-  color: #0077b6;
-  font-weight: bold;
-}
-.status-completed {
-  color: #2d6a4f;
-  font-weight: bold;
-}
-.status-cancelled {
-  color: #d90429;
-  font-weight: bold;
-}
-.btn-details {
-  background-color: #48cae4;
-  color: #fff;
-  padding: 6px 12px;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: 0.3s;
-}
-.btn-details:hover {
-  background-color: #0096c7;
+@media (max-width: 768px) {
+  .list-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .list-header .btn {
+    width: 100%;
+  }
 }

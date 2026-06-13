@@ -1,3 +1,12 @@
 <app-navbar></app-navbar>
 <router-outlet></router-outlet>
 <app-footer></app-footer>
+
+<!-- CareSync Global Toast Notifications -->
+<div class="toast-service-container">
+  <div *ngFor="let toast of toastSvc.toasts" class="custom-toast" [class.success]="toast.type === 'success'" [class.danger]="toast.type === 'error'">
+    <i [class]="toast.type === 'success' ? 'fas fa-check-circle text-teal' : 'fas fa-exclamation-circle text-danger'"></i>
+    <span>{{ toast.message }}</span>
+    <button class="custom-toast-close" (click)="toastSvc.remove(toast.id)">&times;</button>
+  </div>
+</div>

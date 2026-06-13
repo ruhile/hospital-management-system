@@ -1,27 +1,33 @@
-<footer class="footer">
-  <div class="footer-content">
-    <div class="footer-left">
-      <h3>Hospital Management System</h3>
-      <p>Efficient healthcare administration with easy access to doctors, patients, and appointments.</p>
+<footer class="footer-wrapper">
+  <div class="footer-container">
+    <div class="footer-brand-section">
+      <div class="footer-brand">
+        <span class="brand-name">Hospital Management System</span>
+      </div>
+      <p class="brand-tagline">Efficient healthcare administration, scheduling, and staff availability tracking.</p>
     </div>
 
-    <div class="footer-center">
+    <div class="footer-links-section">
+      <h4>Platform</h4>
       <ul>
-        <li><a routerLink="/">Home</a></li>
-        <li><a routerLink="/doctors">Doctors</a></li>
-        <li><a routerLink="/patients">Patients</a></li>
-        <li><a routerLink="/appointments">Appointments</a></li>
+        <li><a routerLink="/"><i class="fas fa-angle-right"></i> Home</a></li>
+        <li><a routerLink="/doctors"><i class="fas fa-angle-right"></i> Doctors</a></li>
+        <li><a routerLink="/patients"><i class="fas fa-angle-right"></i> Patients</a></li>
+        <li><a routerLink="/appointments"><i class="fas fa-angle-right"></i> Appointments</a></li>
       </ul>
     </div>
 
-    <div class="footer-right">
-      <p>📍 Kochi, India</p>
-      <p>📞 +91 98765 43210</p>
-      <p>✉️ support&#64;hospital.com</p>
+    <div class="footer-contact-section">
+      <h4>Contact & Support</h4>
+      <p><i class="fas fa-map-marker-alt"></i> Kochi, Kerala, India</p>
+      <p><i class="fas fa-phone-alt"></i> +91 87144 00000</p>
+      <p><i class="fas fa-envelope"></i> support&#64;hospital.com</p>
     </div>
   </div>
 
   <div class="footer-bottom">
-    <p>&copy; {{ currentYear }} Hospital Management System | All Rights Reserved</p>
+    <div class="footer-bottom-container">
+      <p>&copy; {{ currentYear }} Hospital Management System. All rights reserved.</p>
+    </div>
   </div>
 </footer>
