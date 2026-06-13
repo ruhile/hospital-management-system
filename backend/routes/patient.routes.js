@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { body, param } = require('express-validator');
 const ctrl = require('../controllers/patient.controller');
+
 const validate = (rules) => [...rules, (req,res,next)=> {
   const { validationResult } = require('express-validator');
   const r = validationResult(req);

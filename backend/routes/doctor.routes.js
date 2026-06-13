@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { body, param } = require('express-validator');
 const ctrl = require('../controllers/doctor.controller');
+const { authorize } = require('../middleware/auth.middleware');
 
 const validate = (rules) => [
   ...rules,
@@ -21,6 +22,7 @@ router.get('/', ctrl.list);
 router.get('/:id', ctrl.get);
 
 router.post('/',
+  authorize('admin'),
   validate([
     body('name').isString().notEmpty(),
     body('specialization').isString().notEmpty(),
@@ -30,6 +32,7 @@ router.post('/',
 );
 
 router.put('/:id',
+  authorize('admin'),
   validate([
     param('id').isMongoId()
   ]),
@@ -37,6 +40,7 @@ router.put('/:id',
 );
 
 router.delete('/:id',
+  authorize('admin'),
   validate([ param('id').isMongoId() ]),
   ctrl.remove
 );
